@@ -10,11 +10,15 @@ if(window['view'] === 'index') {
     var data = [];
     var j = 0;
     for(var i = 0; i < 10; i++) {
-        for(var h = 0; h < 100; h++) {
+        for(var h = 0; h < 75; h++) {
             data.push({id: j++, label: i});
         }
     }
-    graph.setData(data);
+   graph.setPictures(data);
+
+    setInterval(() => {
+        graph.update(Math.round(Math.random() * data.length), Math.round(Math.random() * 9));
+    }, 5000);
 }
 
 if(window['view'] === 'swipe') {
