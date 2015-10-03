@@ -32,7 +32,8 @@ gulp.task('copy', function() {
         './bower_components/tweenlite/TweenLite.min.js': './htdocs/dist',
         './bower_components/raf.js/raf.min.js': './htdocs/dist',
         './bower_components/d3/d3.js': './htdocs/dist',
-        './lib/EasePack.min.js': './htdocs/dist'
+        './lib/EasePack.min.js': './htdocs/dist',
+        './bower_components/swing/dist/browser/swing.js': './htdocs/dist'
     };
 
     for(var file in files) {
