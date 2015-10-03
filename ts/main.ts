@@ -6,11 +6,14 @@
 var log : Lib.Logger = new Lib.Logger('labelforce');
 
 if(window['view'] === 'index') {
+    setTimeout(() => {
+        $(".intro").addClass("gone")
+    }, 8000);
     var graph = new Lib.Graph('#drawing_area');
     var data = [];
     var j = 0;
     for(var i = 0; i < 10; i++) {
-        for(var h = 0; h < 75; h++) {
+        for(var h = 0; h < 10; h++) {
             data.push({id: j++, label: i});
         }
     }

@@ -68,7 +68,8 @@ module Lib {
             this.svg.attr('height', this.height);
 
             this.force = d3.layout.force()
-                            .gravity(-0)
+                            .gravity(.025)
+                            .linkStrength(.1)
                             .friction(.95)
                             .theta(.5)
                             .linkDistance(0)
@@ -124,16 +125,19 @@ module Lib {
                 .insert('line', '.node')
                 .attr('class', 'link')
 
-            $(".drawingMiddle img").attr("src", "/img/img/" + picture + ".jpg");
-            $(".drawingMiddle .newCategoryText").text("new Label: " + label);
-
-            log.debug('Graph.update', 'move', picture, previousLabel, '=>', label);
-            log.text('Graph.update', 'adding class shown');
-            $(".drawingMiddle").addClass("shown");
             setTimeout(() => {
-                log.text('Graph.update', 'removing class shown');
-                $(".drawingMiddle").removeClass("shown")
-            }, 1000)
+                $(".drawingMiddle img").attr("src", "/img/img/" + picture + ".jpg");
+                $(".drawingMiddle .newCategoryText").text("new Label: " + label);
+
+                log.debug('Graph.update', 'move', picture, previousLabel, '=>', label);
+                log.text('Graph.update', 'adding class shown');
+                $(".drawingMiddle").addClass("shown");
+                setTimeout(() => {
+                    log.text('Graph.update', 'removing class shown');
+                    $(".drawingMiddle").removeClass("shown")
+                }, 1000)
+            }, 500)
+
         }
 
 

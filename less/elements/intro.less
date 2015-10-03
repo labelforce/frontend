@@ -1,0 +1,14 @@
+.intro {
+  .fullscreen();
+  //background-color: #000;
+  background-image: url(/img/labelforce_logo.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: appearing 2s;
+  z-index: 999;
+
+  &.gone {
+    animation: fadeout 2s;
+    opacity: 0;
+  }
+}
