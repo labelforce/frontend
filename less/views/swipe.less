@@ -1,11 +1,106 @@
+@keyframes like {
+  0% {
+    opacity: 1;
+    transform:  scale(1)
+                rotate(0deg)
+                translate(0,0);
+
+  }
+
+  100% {
+    opacity: 0;
+    transform:  scale(.7)
+                rotate(30deg)
+                translate(150px, 25px);
+  }
+}
+
+@keyframes dislike {
+  0% {
+    opacity: 1;
+    transform:  scale(1)
+                rotate(0deg)
+                translate(0,0);
+  }
+  100% {
+    opacity: 0;
+    transform:  scale(.7)
+                rotate(-30deg)
+                translate(-150px, 25px);
+  }
+}
+
+@keyframes appearing {
+  0% {
+    opacity: 0;
+    transform: scale(.25);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .swipe {
+  @swipeSize: 1024px;
+  margin: 0 auto;
+  width: @swipeSize;
+
+  .swipe_image_container {
+    position: relative;
+    height: @swipeSize + 50px;
+  }
   .swipe_image {
-    width: 256px;
-    height: 256px;
+    position: absolute;
+    width: @swipeSize;
+    height: @swipeSize;
     border: 10px solid white;
     box-shadow: 0 0 15px black;
     -webkit-background-size: contain;
     background-size: contain;
     background-position: center;
+    opacity: 1;
+
+    &:after {
+      content: '';
+      transition: all 1s;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: #fff;
+      font-size: 100px;
+      text-align: center;
+      padding-top: @swipeSize/2 - 50px;
+    }
+
+    &.like {
+      opacity: 0;
+      -webkit-animation: like 1s;
+      -o-animation: like 1s;
+      animation: like 1s;
+
+      &:after {
+        content: 'YEP';
+        background: green;
+      }
+    }
+
+    &.dislike {
+      opacity: 0;
+      -webkit-animation: dislike 1s;
+      -o-animation: dislike 1s;
+      animation: dislike 1s;
+
+      &:after {
+        content: 'NOPE';
+        background: red;
+      }
+    }
+    &.appearing {
+      opacity: 1;
+      animation: appearing 1s;
+    }
   }
 }

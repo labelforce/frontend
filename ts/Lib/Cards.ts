@@ -8,6 +8,11 @@ module Lib {
         like? : string;
         dislike? : string;
         image? : string;
+        likeClass? : string;
+        dislikeClass? : string;
+        appearingClass? : string;
+        likeAnimationLength? : number;
+        appearingAnimationLength? : number;
     }
 
     interface IAnswer {
@@ -23,10 +28,16 @@ module Lib {
             like: '.like',
             dislike: '.dislike',
             image: '.swipe_image',
+            likeClass: 'like',
+            dislikeClass: 'dislike',
+            appearingClass: 'appearing',
+            likeAnimationLength: 1000,
+            appearingAnimationLength: 1000
         };
 
         private config : ICardConfig;
         private items : IPicture[] = [];
+        private $image : JQuery;
 
         public constructor(config : ICardConfig) {
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
@@ -39,20 +50,20 @@ module Lib {
                 this.dislike();
             });
 
-            var hammer = new Hammer.Manager(
-                $(this.config.wrapper).find(this.config.image)[0]
-            );
+            this.$image = $(this.config.wrapper).find(this.config.image);
+            var hammer = new Hammer.Manager( this.$image[0] );
             hammer.add(new Hammer.Swipe({
                 velocity: .00001,
                 distance: .0625
             }));
             hammer.on('swipeleft',  () => {
-                this.dislike()
+                this.dislike();
+
             });
             hammer.on('swiperight', () => {
-                this.like()
-            });
+                this.like();
 
+            });
         }
 
         /**
@@ -67,7 +78,16 @@ module Lib {
             });
 
             this.items.splice(0,1);
-            this.update();
+
+            this.$image.addClass(this.config.likeClass);
+            setTimeout(() => {
+                this.$image.removeClass(this.config.likeClass);
+                this.update();
+                this.$image.addClass(this.config.appearingClass);
+                setTimeout(() => {
+                    this.$image.removeClass(this.config.appearingClass);
+                }, this.config.appearingAnimationLength);
+            }, this.config.likeAnimationLength);
         }
 
         /**
@@ -82,7 +102,16 @@ module Lib {
             });
 
             this.items.splice(0,1);
-            this.update();
+
+            this.$image.addClass(this.config.dislikeClass);
+            setTimeout(() => {
+                this.$image.removeClass(this.config.dislikeClass);
+                this.update();
+                this.$image.addClass(this.config.appearingClass);
+                setTimeout(() => {
+                    this.$image.removeClass(this.config.appearingClass);
+                }, this.config.appearingAnimationLength);
+            }, this.config.likeAnimationLength);
         }
 
         /**
