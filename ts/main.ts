@@ -1,41 +1,20 @@
 ///<reference path="Lib/Graph"/>
 ///<reference path="Lib/Cards"/>
 ///<reference path="Lib/Logger"/>
+///<reference path="Lib/Leveling"/>
 
 var log : Lib.Logger = new Lib.Logger('labelforce');
 
 if(window['view'] === 'index') {
     var graph = new Lib.Graph('#drawing_area');
-    graph.setData([
-        {
-            id: 6,
-            label: 3
-        }, {
-            id: 2,
-            label: 3
-        }, {
-            id: 1,
-            label: 3
-        }, {
-            id: 9,
-            label: 6
-        }, {
-            id: 15,
-            label: 6
-        }, {
-            id: 23,
-            label:20
-        }, {
-            id: 24,
-            label: 20
-        }, {
-            id: 25,
-            label: 20
-        }, {
-            id: 26,
-            label: 20
+    var data = [];
+    var j = 0;
+    for(var i = 0; i < 10; i++) {
+        for(var h = 0; h < 100; h++) {
+            data.push({id: j++, label: i});
         }
-    ]);
+    }
+    graph.setData(data);
 }
 
 if(window['view'] === 'swipe') {
@@ -58,4 +37,5 @@ if(window['view'] === 'swipe') {
         }
     ]);
     cards.update();
+    var leveling : Lib.Leveling = new Lib.Leveling(cards);
 }

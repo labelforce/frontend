@@ -18,6 +18,7 @@ module Lib {
         name : string;
         label : number;
         parentLabel? : number;
+        color? : string;
     }
 
     interface ICoordinates {
@@ -33,7 +34,12 @@ module Lib {
         private data : IPicture[];
         private svg;
         private labelNum : number;
-        private circleSize : number = 200;
+
+        private maxPerCircle : number = 6;
+
+        private innerCircle : number = 150;
+        private circleSize : number = 170;
+        private outerCircle : number = 320;
 
         public constructor(selector : string) {
             this.svg = d3.select(selector);
@@ -46,9 +52,10 @@ module Lib {
             this.svg.attr('height', this.height);
 
             this.force = d3.layout.force()
-                            .gravity(-.1)
-                            .alpha(10)
-                            .linkDistance(200)
+                            .gravity(0)
+                            .friction(.9)
+                            .theta(.5)
+                            .linkDistance(90)
                             .size([this.width, this.height]);
 
         }
@@ -59,9 +66,21 @@ module Lib {
         }
 
         private getLabelPointCoordinates(p : IPicturePoint) : ICoordinates {
+            var circleSize : number = this.circleSize;
+            var percentage : number = p.label / this.labelNum;
+            if(p.label >= this.maxPerCircle) {
+                circleSize = this.outerCircle;
+                percentage = p.label / (this.labelNum - this.maxPerCircle + 1) + .125 * Math.PI;
+            } else if (this.labelNum >= this.maxPerCircle) {
+                percentage = p.label / this.maxPerCircle;
+            }
+
+            // preprocess
+            percentage -=  Math.PI/2;
+
             return {
-                x: Math.cos(p.label / this.labelNum * Math.PI) * this.circleSize + window.innerWidth/2,
-                y: Math.sin(p.label / this.labelNum * Math.PI) * this.circleSize + window.innerHeight/2
+                x: Math.cos(percentage * Math.PI * 2) * circleSize + window.innerWidth/2,
+                y: Math.sin(percentage * Math.PI * 2) * circleSize + window.innerHeight/2
             }
         }
 
@@ -90,20 +109,35 @@ module Lib {
                 .attr('cx', window.innerWidth/2)
                 .attr('cy', window.innerHeight/2)
                 .attr('r', this.circleSize)
-                .attr('class', 'middle')
+                .attr('class', 'middle');
 
+
+            this.svg.append('circle')
+                .attr('cx', window.innerWidth/2)
+                .attr('cy', window.innerHeight/2)
+                .attr('r', this.innerCircle)
+                .attr('class', 'middle');
+
+
+            this.svg.append('circle')
+                .attr('cx', window.innerWidth/2)
+                .attr('cy', window.innerHeight/2)
+                .attr('r', this.outerCircle)
+                .attr('class', 'middle');
+
+            var colors : any = d3.scale.category10();
             this.data.forEach((d : IPicture) => {
                 if(_labelsAdded.indexOf(d.label) === -1) {
                     labelMap[d.label] = nodes.length;
-                    nodes.push({name: d.label.toString(), label: _labelsAdded.length, parent: null});
+                    nodes.push({name: d.label.toString(), label: _labelsAdded.length, parent: null, color: colors(_labelsAdded.length)}); // TODO
                     _labelsAdded.push(d.label);
                 }
                 if(_picturesAdded.indexOf(d.id) === -1) {
                     pictureMap[d.id] = nodes.length;
-                    nodes.push({name: d.id.toString(), label: null, parent: null, parentLabel: labelMap[d.label]});
+                    nodes.push({name: d.id.toString(), label: null, parent: null, parentLabel: labelMap[d.label], color: '#fff' });
                     _picturesAdded.push(d.id);
                 }
-                links.push({source: labelMap[d.label], target: pictureMap[d.id]});
+                links.push({source: labelMap[d.label], target: pictureMap[d.id], color: colors(_labelsAdded.length-1)});
             });
             this.labelNum = _labelsAdded.length-1;
 
@@ -121,13 +155,15 @@ module Lib {
             var link = this.svg.selectAll(".link")
                 .data(links)
                 .enter().append("line")
-                .attr("class", "link");
+                .attr("class", "link")
+                .style('stroke', function(d) { console.log(d); return d.color; });
 
             var node = this.svg.selectAll(".node")
                 .data(nodes)
                 .enter().append("circle")
                 .attr("class", function(d : IPicturePoint) { return d.label !== null ? 'node label' : 'node' })
                 .attr("r", function(d) { return d.label !== null ? 15 : 5 })
+                .style('stroke', function(d) { return d.color })
                 .call(this.force.drag);
 
             node.append("title")
@@ -150,7 +186,6 @@ module Lib {
                 })
                     .attr("cy", (d : IPicturePoint) => {
                         if(d.label !== null) {
-                            console.log(d, this.labelNum, this.circleSize);
                             d.y = this.getLabelPointCoordinates(d).y
                         } /*else if (this.isInCircle({x: d.x, y: d.y})) {
                             var parentY = this.getLabelPointCoordinates(<IPicturePoint>nodes[d.parentLabel]).y;

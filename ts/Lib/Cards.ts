@@ -39,6 +39,9 @@ module Lib {
         private items : IPicture[] = [];
         private $image : JQuery;
 
+        private correctCallbacks : (() => void)[] = [];
+        private incorrectCallbacks : (() => void)[] = [];
+
         public constructor(config : ICardConfig) {
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
             log.debug('Cards', 'config', this.config);
@@ -142,6 +145,14 @@ module Lib {
          */
         private sendAnswer(answer : IAnswer) : Promise<any> {
             return new Promise((resolve : Function, reject : Function) => {
+                // TODO have real implementation here
+                if(Math.random() > .5) {
+                    // correct
+                    this.executeCorrect();
+                } else {
+                    this.executeIncorrect();
+                }
+
                 // TODO implement
                 reject();
             })
@@ -160,6 +171,26 @@ module Lib {
             }
             log.info('Cards', 'update', url);
             $(this.config.wrapper).find(this.config.image).attr('style', 'background-image: url(' + url + ')');
+        }
+
+        public onCorrect(callback : () => void) {
+            this.correctCallbacks.push(callback);
+        }
+
+        public onIncorrect(callback : () => void) {
+            this.incorrectCallbacks.push(callback);
+        }
+
+        private executeCorrect() : void {
+            this.correctCallbacks.forEach((callback : () => void) => {
+                callback();
+            })
+        }
+
+        private executeIncorrect() : void {
+            this.incorrectCallbacks.forEach((callback : () => void) => {
+                callback();
+            })
         }
 
     }

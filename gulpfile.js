@@ -29,11 +29,11 @@ gulp.task('less', function() {
 
 gulp.task('copy', function() {
     var files = {
-        './bower_components/tweenlite/TweenLite.min.js': './htdocs/dist',
-        './bower_components/raf.js/raf.min.js': './htdocs/dist',
         './bower_components/d3/d3.js': './htdocs/dist',
-        './lib/EasePack.min.js': './htdocs/dist',
-        './bower_components/swing/dist/browser/swing.js': './htdocs/dist'
+        './bower_components/jquery/dist/jquery.min.js': './htdocs/dist',
+        './bower_components/hammerjs/hammer.min.js': './htdocs/dist',
+        './bower_components/handlebars/handlebars.min.js': './htdocs/dist',
+        './bower_components/localforage/dist/localforage.min.js': './htdocs/dist'
     };
 
     for(var file in files) {
