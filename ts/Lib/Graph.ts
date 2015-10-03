@@ -46,6 +46,7 @@ module Lib {
             this.svg.attr('height', this.height);
 
             this.force = d3.layout.force()
+                            .gravity(-.1)
                             .alpha(10)
                             .linkDistance(200)
                             .size([this.width, this.height]);
