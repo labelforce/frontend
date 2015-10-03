@@ -68,9 +68,9 @@ module Lib {
             this.svg.attr('height', this.height);
 
             this.force = d3.layout.force()
-                            .gravity(.25)
+                            .gravity(.1)
                             .linkStrength(.1)
-                            .friction(.95)
+                            .friction(.8)
                             .theta(.5)
                             .linkDistance(0)
                             .size([this.width, this.height]);
@@ -172,16 +172,16 @@ module Lib {
             this.pictures.forEach((d : IPicture) => {
                 if(_labelsAdded.indexOf(d.label) === -1) {
                     this.data.labelMap[d.label] = this.data.nodes.length;
-                    this.data.nodes.push({name: d.label.toString(), label: _labelsAdded.length, parent: null, color: colors(_labelsAdded.length)});
+                    this.data.nodes.push({name: d.label.toString(), label: _labelsAdded.length, parent: null, color: colors(d.label)});
                     _labelsAdded.push(d.label);
                 }
                 if(_picturesAdded.indexOf(d.id) === -1) {
                     this.data.pictureMap[d.id] = this.data.nodes.length;
-                    this.data.nodes.push({name: d.id.toString(), label: null, parent: null, parentLabel: this.data.labelMap[d.label], color: colors(_labelsAdded.length-1) });
+                    this.data.nodes.push({name: d.id.toString(), label: null, parent: null, parentLabel: this.data.labelMap[d.label], color: colors(d.label) });
                     _picturesAdded.push(d.id);
                 }
                 this.data.pictureLinkMap[d.id] = _picturesAdded.length-1;
-                this.data.links.push({source: this.data.labelMap[d.label], target: this.data.pictureMap[d.id], color: colors(_labelsAdded.length-1)});
+                this.data.links.push({source: this.data.labelMap[d.label], target: this.data.pictureMap[d.id], color: colors(d.label)});
             });
             this.labelNum = _labelsAdded.length-1;
 

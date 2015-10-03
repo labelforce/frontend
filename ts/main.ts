@@ -6,7 +6,6 @@
 var log : Lib.Logger = new Lib.Logger('labelforce');
 
 if(window['view'] === 'index') {
-/*
     var firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/net');
     firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {
         firebase.once('value', (value : any) => {
@@ -20,18 +19,22 @@ if(window['view'] === 'index') {
 
             var graph : Lib.Graph = new Lib.Graph('#drawing_area');
             graph.setPictures(data);
+
+            firebase.on('value_changed', (value : any) => {
+                debugger;
+            })
         });
     });
 
 
     setTimeout(() => {
         $(".intro").addClass("gone")
-    }, 8000);*/
-    var graph = new Lib.Graph('#drawing_area');
+    }, 8000);
+/*    var graph = new Lib.Graph('#drawing_area');
     var data = [];
     var j = 0;
     for(var i = 0; i < 10; i++) {
-        for(var h = 0; h < 200; h++) {
+        for(var h = 0; h < 50; h++) {
             data.push({id: j++, label: i});
         }
     }
@@ -39,7 +42,7 @@ if(window['view'] === 'index') {
 
     setInterval(() => {
         graph.update(Math.round(Math.random() * data.length), Math.round(Math.random() * 9));
-    }, 5000);
+    }, 5000);*/
 }
 
 if(window['view'] === 'swipe') {
