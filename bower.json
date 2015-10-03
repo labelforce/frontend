@@ -1,0 +1,23 @@
+{
+  "name": "hz",
+  "version": "0.0.0",
+  "authors": [
+    "Johannes Hertenstein <johannes@nimius.net>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.6",
+    "raf.js": "~0.0.4"
+  }
+}
