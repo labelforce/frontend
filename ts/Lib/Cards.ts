@@ -22,7 +22,7 @@ module Lib {
             wrapper: '',
             like: '.like',
             dislike: '.dislike',
-            image: 'img'
+            image: '.swipe_image',
         };
 
         private config : ICardConfig;
@@ -30,14 +30,29 @@ module Lib {
 
         public constructor(config : ICardConfig) {
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
-            debugger;
+
             $(this.config.wrapper).find(this.config.like).on('click', () => {
                 this.like();
             });
 
             $(this.config.wrapper).find(this.config.dislike).on('click', () => {
                 this.dislike();
-            })
+            });
+
+            var hammer = new Hammer.Manager(
+                $(this.config.wrapper).find(this.config.image)[0]
+            );
+            hammer.add(new Hammer.Swipe({
+                velocity: .00001,
+                distance: .0625
+            }));
+            hammer.on('swipeleft',  () => {
+                this.dislike()
+            });
+            hammer.on('swiperight', () => {
+                this.like()
+            });
+
         }
 
         /**
@@ -91,7 +106,7 @@ module Lib {
             } else {
                 url = '/img/img/' + this.items[0].id + '.jpg';
             }
-            $(this.config.wrapper).find(this.config.image).attr('src', url);
+            $(this.config.wrapper).find(this.config.image).attr('style', 'background-image: url(' + url + ')');
         }
 
     }

@@ -37,7 +37,7 @@ if(window['view'] === 'index') {
 
 if(window['view'] === 'swipe') {
     var cards = new Lib.Cards({
-        wrapper: '.swipe',
+        wrapper: '.swipe'
     });
     cards.setItems([
         {
