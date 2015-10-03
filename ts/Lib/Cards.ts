@@ -85,7 +85,13 @@ module Lib {
         }
 
         public update() {
-            $(this.config.wrapper).find(this.config.image).attr('src', '/img/img/' + this.items[0].id + '.jpg');
+            var url : string;
+            if(this.items.length === 0) {
+                url = 'http://placehold.it/200x200?text=No%20more%20images'
+            } else {
+                url = '/img/img/' + this.items[0].id + '.jpg';
+            }
+            $(this.config.wrapper).find(this.config.image).attr('src', url);
         }
 
     }
