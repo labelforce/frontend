@@ -7,10 +7,13 @@ module Lib {
         wrapper : string;
         like? : string;
         dislike? : string;
+        image? : string;
     }
 
-    interface IItem {
-        id : number;
+    interface IAnswer {
+        picture_id : number;
+        label : number;
+        is_label : boolean;
     }
 
     export class Cards {
@@ -18,11 +21,12 @@ module Lib {
         private static DEFAULTCONFIG : ICardConfig = {
             wrapper: '',
             like: '.like',
-            dislike: '.dislike'
+            dislike: '.dislike',
+            image: 'img'
         };
 
         private config : ICardConfig;
-        private items : IItem[] = [];
+        private items : IPicture[] = [];
 
         public constructor(config : ICardConfig) {
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
@@ -36,18 +40,52 @@ module Lib {
             })
         }
 
+        /**
+         * Likes the current image
+         */
         public like() : void {
-            console.log("like")
-            // TODO implement
+
+            this.sendAnswer({
+                picture_id: this.items[0].id,
+                label: this.items[0].label,
+                is_label: true
+            });
+
+            this.items.splice(0,1);
+            this.update();
         }
 
+        /**
+         * Dislikes the current image
+         */
         public dislike() : void {
-            console.log("dislike")
-            // TODO implement
+
+            this.sendAnswer({
+                picture_id: this.items[0].id,
+                label: this.items[0].label,
+                is_label: true
+            });
+
+            this.items.splice(0,1);
+            this.update();
         }
 
-        public setItems(items : IItem[]) {
+        /**
+         * Sends answer to the service
+         */
+        private sendAnswer(answer : IAnswer) : Promise<any> {
+            return new Promise((resolve : Function, reject : Function) => {
+                // TODO implement
+                reject();
+            })
+        }
+
+        public setItems(items : IPicture[]) {
             this.items = items;
+        }
+
+        public update() {
+            $(this.config.wrapper).find(this.config.image).attr('src', '/img/img/' + this.items[0].id + '.jpg');
         }
 
     }
