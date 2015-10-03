@@ -6,14 +6,32 @@
 var log : Lib.Logger = new Lib.Logger('labelforce');
 
 if(window['view'] === 'index') {
+/*
+    var firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/net');
+    firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {
+        firebase.once('value', (value : any) => {
+            var datas : {[hash : string] : number}[] = value.val();
+
+            var data = [];
+            for(var i : number = 0; i < datas.length; i++) {
+                var key : string = Object.keys(datas[i])[0];
+                data.push({id: i, label: datas[i][key]});
+            }
+
+            var graph : Lib.Graph = new Lib.Graph('#drawing_area');
+            graph.setPictures(data);
+        });
+    });
+
+
     setTimeout(() => {
         $(".intro").addClass("gone")
-    }, 8000);
+    }, 8000);*/
     var graph = new Lib.Graph('#drawing_area');
     var data = [];
     var j = 0;
     for(var i = 0; i < 10; i++) {
-        for(var h = 0; h < 10; h++) {
+        for(var h = 0; h < 200; h++) {
             data.push({id: j++, label: i});
         }
     }

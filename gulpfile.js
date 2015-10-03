@@ -33,7 +33,8 @@ gulp.task('copy', function() {
         './bower_components/jquery/dist/jquery.min.js': './htdocs/dist',
         './bower_components/hammerjs/hammer.min.js': './htdocs/dist',
         './bower_components/handlebars/handlebars.min.js': './htdocs/dist',
-        './bower_components/localforage/dist/localforage.min.js': './htdocs/dist'
+        './bower_components/localforage/dist/localforage.min.js': './htdocs/dist',
+        './bower_components/firebase/firebase.js': './htdocs/dist',
     };
 
     for(var file in files) {

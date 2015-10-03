@@ -6,7 +6,8 @@ LazyLoad.js([
     'dist/jquery.min.js',
      'dist/hammer.min.js',
         'dist/localforage.min.js',
-        'dist/handlebars.min.js'
+        'dist/handlebars.min.js',
+        'dist/firebase.js'
     ], function() {
             LazyLoad.js(['dist/script.js'])
     }

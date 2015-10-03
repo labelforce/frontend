@@ -13,6 +13,7 @@ module Lib {
         appearingClass? : string;
         likeAnimationLength? : number;
         appearingAnimationLength? : number;
+        name? : string;
     }
 
     interface IAnswer {
@@ -25,14 +26,15 @@ module Lib {
 
         private static DEFAULTCONFIG : ICardConfig = {
             wrapper: '',
-            like: '.like',
-            dislike: '.dislike',
+            like: '.like-button',
+            dislike: '.dislike-button',
             image: '.swipe_image',
             likeClass: 'like',
             dislikeClass: 'dislike',
             appearingClass: 'appearing',
             likeAnimationLength: 1000,
-            appearingAnimationLength: 1000
+            appearingAnimationLength: 1000,
+            name : '.js-label'
         };
 
         private config : ICardConfig;
@@ -170,6 +172,7 @@ module Lib {
                 url = '/img/img/' + this.items[0].id + '.jpg';
             }
             log.info('Cards', 'update', url);
+            $(this.config.wrapper).find(this.config.name).text(this.items[0].id);
             $(this.config.wrapper).find(this.config.image).attr('style', 'background-image: url(' + url + ')');
         }
 

@@ -7,13 +7,21 @@ module Lib {
     interface ILevelingConfig {
         level? : string;
         levelTemplate? : string;
+        ether? : string;
+        points? : string;
+        nextEther? : string;
+        nextPoints? : string;
     }
 
     export class Leveling {
 
         private static DEFAULTCONFIG : ILevelingConfig = {
             level: '.level',
-            levelTemplate: '<b>{{points}}</b> ({{level.name}})'
+            levelTemplate: '{{level.name}}',
+            ether: '.js-ether',
+            points : '.js-points',
+            nextEther: '.js-nextEther',
+            nextPoints: '.js-nextPoints'
         };
 
         private static level : ILevel[] = [
@@ -31,6 +39,9 @@ module Lib {
         private cards : Cards;
 
         private points : number = 0;
+        private ether : number = 0;
+        private nextEther : number = 1;
+        private nextPoints : number = Math.round(Math.random() * 2);
 
         private config : ILevelingConfig;
 
@@ -47,28 +58,40 @@ module Lib {
                 })
             });
 
+            Save.getInstance().has('ether').then((has : boolean) => {
+                    Save.getInstance().get('ether').then((ether : number) => {
+                        log.debug('Leveling', 'loading ether', ether);
+                        if(ether === null) return;
+                        this.ether = ether;
+                        this.update();
+                    })
+            });
+
             this.cards.onCorrect(() => {this.correct()});
             this.cards.onIncorrect(() => {this.incorrect()});
             this.update();
         }
 
         public correct() : void {
-            this.points++;
+            this.points += this.nextPoints;
+            this.ether += this.nextEther;
             log.info('Leveling', 'correct', this.points);
             this.persist();
             this.update();
         }
 
         public incorrect() : void {
-            this.points--;
+            this.points -= this.nextPoints;
+            this.ether -= this.nextEther;
             log.info('Leveling', 'incorrect', this.points);
             this.persist();
             this.update();
         }
 
         private persist() : void {
-            log.info('Leveling', 'persisting', this.points);
+            log.info('Leveling', 'persisting', this.points, this.ether);
             Save.getInstance().set('points', this.points);
+            Save.getInstance().set('ether', this.ether);
         }
 
         public getCurrentLevel() : ILevel {
@@ -85,7 +108,15 @@ module Lib {
                 points: this.points,
                 level: this.getCurrentLevel()
             });
+
             $(this.config.level).html(content);
+            $(this.config.points).html(this.points.toString());
+            $(this.config.ether).html(this.ether.toString());
+
+            this.nextEther = Math.round(Math.random() * 2);
+
+            $(this.config.nextEther).html(this.nextEther.toString());
+            $(this.config.nextPoints).html(this.nextPoints.toString());
         }
     }
 }

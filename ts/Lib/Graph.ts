@@ -68,7 +68,7 @@ module Lib {
             this.svg.attr('height', this.height);
 
             this.force = d3.layout.force()
-                            .gravity(.025)
+                            .gravity(.25)
                             .linkStrength(.1)
                             .friction(.95)
                             .theta(.5)
