@@ -46,6 +46,26 @@ if(window['view'] === 'index') {
 }
 
 if(window['view'] === 'swipe') {
+    var firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/labelme');
+    var cards = new Lib.Cards({
+        wrapper: '.swipe'
+    });
+    var leveling : Lib.Leveling = new Lib.Leveling(cards);
+
+    firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {
+        firebase.on('value', (value : any) => {
+            var datas : any = value.val();
+            var data = [];
+            for(var l in datas) {
+                data.push(datas[l]);
+            }
+
+            cards.setItems(data);
+            cards.update();
+        });
+    });
+
+/*
     var cards = new Lib.Cards({
         wrapper: '.swipe'
     });
@@ -65,5 +85,5 @@ if(window['view'] === 'swipe') {
         }
     ]);
     cards.update();
-    var leveling : Lib.Leveling = new Lib.Leveling(cards);
+    var leveling : Lib.Leveling = new Lib.Leveling(cards);*/
 }

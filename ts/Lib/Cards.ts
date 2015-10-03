@@ -43,8 +43,12 @@ module Lib {
 
         private correctCallbacks : (() => void)[] = [];
         private incorrectCallbacks : (() => void)[] = [];
+        private firebase : Firebase;
 
         public constructor(config : ICardConfig) {
+            this.firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/swiped');
+            this.firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {});
+
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
             log.debug('Cards', 'config', this.config);
 
@@ -147,7 +151,8 @@ module Lib {
          */
         private sendAnswer(answer : IAnswer) : Promise<any> {
             return new Promise((resolve : Function, reject : Function) => {
-                // TODO have real implementation here
+                this.firebase.push(answer, resolve);
+                /*// TODO have real implementation here
                 if(Math.random() > .5) {
                     // correct
                     this.executeCorrect();
@@ -156,7 +161,7 @@ module Lib {
                 }
 
                 // TODO implement
-                reject();
+                reject();*/
             })
         }
 

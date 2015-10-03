@@ -46,6 +46,8 @@ module Lib {
         private config : ILevelingConfig;
 
         public constructor(cards : Cards, config : ILevelingConfig = {}) {
+
+
             this.cards = cards;
             this.config = $.extend(true, {}, Leveling.DEFAULTCONFIG, config);
 
