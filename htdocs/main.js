@@ -4,7 +4,8 @@ LazyLoad=function(e){function t(t,n){var s,c=e.createElement(t);for(s in n)n.has
 LazyLoad.js([
     'dist/d3.js',
     'https://code.jquery.com/jquery-2.1.4.min.js',
-        'http://hammerjs.github.io/dist/hammer.min.js'
+        'http://hammerjs.github.io/dist/hammer.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/localforage/1.2.10/localforage.min.js'
     ], function() {
             LazyLoad.js(['dist/script.js'])
     }

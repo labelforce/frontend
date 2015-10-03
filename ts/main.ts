@@ -1,5 +1,8 @@
 ///<reference path="Lib/Graph"/>
 ///<reference path="Lib/Cards"/>
+///<reference path="Lib/Logger"/>
+
+var log : Lib.Logger = new Lib.Logger('labelforce');
 
 if(window['view'] === 'index') {
     var graph = new Lib.Graph('#drawing_area');

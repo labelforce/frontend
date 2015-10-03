@@ -41,12 +41,15 @@ module Lib {
 
         public constructor(config : ICardConfig) {
             this.config = $.extend(true, {}, Cards.DEFAULTCONFIG, config);
+            log.debug('Cards', 'config', this.config);
 
             $(this.config.wrapper).find(this.config.like).on('click', () => {
+                log.debug('Cards', 'like click');
                 this.like();
             });
 
             $(this.config.wrapper).find(this.config.dislike).on('click', () => {
+                log.debug('Cards', 'like dislike');
                 this.dislike();
             });
 
@@ -57,10 +60,12 @@ module Lib {
                 distance: .0625
             }));
             hammer.on('swipeleft',  () => {
+                log.debug('Cards', 'dislike swipe');
                 this.dislike();
 
             });
             hammer.on('swiperight', () => {
+                log.debug('Cards', 'like swipe');
                 this.like();
 
             });
@@ -70,7 +75,7 @@ module Lib {
          * Likes the current image
          */
         public like() : void {
-
+            log.info('Cards', 'like');
             this.sendAnswer({
                 picture_id: this.items[0].id,
                 label: this.items[0].label,
@@ -80,12 +85,21 @@ module Lib {
             this.items.splice(0,1);
 
             this.$image.addClass(this.config.likeClass);
+            log.text('Cards', 'adding Class', this.config.likeClass);
+
             setTimeout(() => {
                 this.$image.removeClass(this.config.likeClass);
+                log.text('Cards', 'removing Class', this.config.likeClass);
+
                 this.update();
+
                 this.$image.addClass(this.config.appearingClass);
+                log.text('Cards',' adding Class', this.config.appearingClass);
+
                 setTimeout(() => {
                     this.$image.removeClass(this.config.appearingClass);
+                    log.text('Cards', 'removing Class', this.config.appearingClass);
+
                 }, this.config.appearingAnimationLength);
             }, this.config.likeAnimationLength);
         }
@@ -104,12 +118,21 @@ module Lib {
             this.items.splice(0,1);
 
             this.$image.addClass(this.config.dislikeClass);
+            log.text('Cards', 'adding Class', this.config.dislikeClass);
+
             setTimeout(() => {
                 this.$image.removeClass(this.config.dislikeClass);
+                log.text('Cards', 'removing Class', this.config.dislikeClass);
+
                 this.update();
+
                 this.$image.addClass(this.config.appearingClass);
+                log.text('Cards',' adding Class', this.config.appearingClass);
+
                 setTimeout(() => {
                     this.$image.removeClass(this.config.appearingClass);
+                    log.text('Cards', 'removing Class', this.config.appearingClass);
+
                 }, this.config.appearingAnimationLength);
             }, this.config.likeAnimationLength);
         }
@@ -135,6 +158,7 @@ module Lib {
             } else {
                 url = '/img/img/' + this.items[0].id + '.jpg';
             }
+            log.info('Cards', 'update', url);
             $(this.config.wrapper).find(this.config.image).attr('style', 'background-image: url(' + url + ')');
         }
 
