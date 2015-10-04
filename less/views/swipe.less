@@ -90,12 +90,31 @@
     .ether, .points  {
       display: inline-block;
       margin: 10px;
-      width: 35px;
-      height: 35px;
-      padding: 8px;
+      width: 50px;
+      height: 50px;
+      padding: 16px;
       border-radius: 50%;
+			opacity: 0;
+			transition: 1.5s transform ease-out, .3s opacity  linear;
+			&.active {
+				opacity: 1;
+				&.invisible {
+					display: none;
+				}
+			}
     }
+		.ether.active {
+			transform: translate(-3vw, 40vh);
+		}
+		.points.active {
+			transform: translate(3vw, 40vh);
+		}
   }
+
+	.filterClass {
+		-webkit-filter: url("#goo");
+		filter: url("../swipe.html#goo");
+	}
 
   .currentPoints {
     text-align: center;

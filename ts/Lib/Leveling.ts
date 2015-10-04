@@ -57,9 +57,49 @@ module Lib {
                     var score : IScore = value.val()[Util.HashUtil.getHashNum()];
                     log.info('Leveling', 'score received', score);
                     if(score !== null) {
-                        this.ether = score.ether;
-                        this.points = score.exp;
-                        this.update();
+											
+												this.nextEther = Math.abs(this.ether - score.ether);
+												this.nextPoints = Math.abs(this.points - score.exp);
+
+												var nextEther = document.getElementById('next-ether');
+												var nextPoints = document.getElementById('next-points'); 
+
+												var currentEther = document.getElementById('ether');
+												var currentPoints = document.getElementById('points');
+
+												nextEther.innerHTML = this.nextEther.toString();
+												nextPoints.innerHTML = this.nextPoints.toString();
+
+												nextPoints.classList.add('active');
+												nextEther.classList.add('active');
+
+
+												// lets do some animation at 7.25 am ;)
+
+
+												var delay = 90;
+												var distance = 180;
+
+												// 1.5 sec is needed for the css animation
+												setTimeout(() => {
+													this.ether = score.ether;
+													this.points = score.exp;
+													this.update();
+
+
+													nextPoints.classList.add('invisible');
+													nextEther.classList.add('invisible');
+
+													nextPoints.classList.remove('active');
+													nextEther.classList.remove('active');
+
+													setTimeout(() => {
+													
+														nextPoints.classList.remove('invisible');
+														nextEther.classList.remove('invisible');
+													}, 1500);
+
+												}, 1500);
                     }
                 })
             });
