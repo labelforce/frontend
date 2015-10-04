@@ -119,3 +119,10 @@ if(window['view'] === 'swipe') {
     cards.update();
     var leveling : Lib.Leveling = new Lib.Leveling(cards);*/
 }
+
+if(window['view'] === 'app') {
+    var link : string = $('#swipe_link').attr('href');
+    link += '#' + (Math.round(Math.random() * 3)).toString();
+    log.info('Changing link to', link);
+    $('#swipe_link').attr('href', link);
+}
