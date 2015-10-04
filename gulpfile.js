@@ -54,7 +54,7 @@ gulp.task('copy', function() {
 
 gulp.task('serve', serve('htdocs'));
 
-gulp.task('bower', shell.task('bower install'))
+gulp.task('bower', shell.task('bower install'));
 
 gulp.task('watch', function() {
   gulp.watch('./ts/**/*.ts', ['typescript']);
