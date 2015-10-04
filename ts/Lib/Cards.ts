@@ -69,7 +69,7 @@ module Lib {
             });
 
             this.$image = $(this.config.wrapper).find(this.config.image);
-            var hammer = new Hammer.Manager( this.$image[0] );
+            var hammer = new Hammer.Manager( $('body')[0] );
             hammer.add(new Hammer.Swipe({
                 velocity: .00001,
                 distance: .0625
@@ -160,7 +160,11 @@ module Lib {
                 answer.user_id = Util.HashUtil.getHashNum();
 
                 log.debug('Cards.sendAnswer', answer);
-                this.firebase.push(answer, resolve);
+                this.firebase.push(answer, (err) => {
+                    if(err) reject(err);
+                    resolve();
+                });
+
                 /*// TODO have real implementation here
                 if(Math.random() > .5) {
                     // correct
