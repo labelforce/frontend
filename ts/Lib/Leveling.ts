@@ -54,13 +54,13 @@ module Lib {
 
             Util.FirebaseUtil.getFirebase('score').then((firebase : Firebase) => {
                 firebase.on('value', (value) => {
-                    var score : IScore = value.val();
+                    var score : IScore = value.val()[Util.HashUtil.getHashNum()];
+                    log.info('Leveling', 'score received', score);
                     if(score !== null) {
                         this.ether = score.ether;
                         this.points = score.exp;
                         this.update();
                     }
-                    log.info('Leveling', 'score received', value.val());
                 })
             });
 
