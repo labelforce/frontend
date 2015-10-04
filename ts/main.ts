@@ -2,27 +2,46 @@
 ///<reference path="Lib/Cards"/>
 ///<reference path="Lib/Logger"/>
 ///<reference path="Lib/Leveling"/>
+///<reference path="Util/FirebaseUtil"/>
 
 var log : Lib.Logger = new Lib.Logger('labelforce');
 
+interface IDataAnswer {
+    [name : string] : number;
+}
+
 if(window['view'] === 'index') {
-    var firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/net');
-    firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {
+
+    Util.FirebaseUtil.getFirebase('net').then((firebase : Firebase) => {
+        var graph : Lib.Graph = new Lib.Graph('#drawing_area');
         firebase.once('value', (value : any) => {
-            var datas : {[hash : string] : number}[] = value.val();
+            log.debug('VALUE', value.val());
+            var datas : {[name : string] : IDataAnswer} = value.val();
+             var data : Lib.IPicture[] = [];
 
-            var data = [];
-            for(var i : number = 0; i < datas.length; i++) {
-                var key : string = Object.keys(datas[i])[0];
-                data.push({id: i, label: datas[i][key]});
-            }
+            var ids : string[] = [];
+             for(var j in datas) {
+                var prefixedId : string = Object.keys(datas[j])[0];
+                 if(ids.indexOf(prefixedId) > -1) {continue;}
+                 ids.push(prefixedId);
+                 data.push({
+                     id: parseInt(prefixedId.substr(1)),
+                     label: datas[j][prefixedId]
+                 })
+             }
 
-            var graph : Lib.Graph = new Lib.Graph('#drawing_area');
-            graph.setPictures(data);
+             graph.setPictures(data);
 
-            firebase.on('value_changed', (value : any) => {
-                debugger;
-            })
+            var check : boolean = false;
+            firebase.on('child_added', (value : any) => {
+                if(check) {
+                    var v : IDataAnswer = value.val();
+                    var prefixedId : string = Object.keys(v)[0];
+                     log.debug(v);
+                     graph.update(parseInt(prefixedId.substr(1)), v[prefixedId]);
+                }
+            });
+            setTimeout(() => {check = true;log.info('let the checking beginn')}, 4000)
         });
     });
 
@@ -46,25 +65,38 @@ if(window['view'] === 'index') {
 }
 
 if(window['view'] === 'swipe') {
-    var firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/labelme');
-    var cards = new Lib.Cards({
-        wrapper: '.swipe'
-    });
-    var leveling : Lib.Leveling = new Lib.Leveling(cards);
+    Util.FirebaseUtil.getFirebase('labelme').then((firebase : Firebase) => {
+        var cards = new Lib.Cards({
+            wrapper: '.swipe'
+        });
+        var leveling : Lib.Leveling = new Lib.Leveling(cards);
 
-    firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {
-        firebase.on('value', (value : any) => {
-            var datas : any = value.val();
-            var data = [];
+        firebase.once('value', (value : any) => {
+            var datas : {[name : string] : IDataAnswer} = value.val();
+
+            log.info('labelme',datas);
+
+            var data : Lib.IPicture[] = [];
             for(var l in datas) {
-                data.push(datas[l]);
+                var prefixedId : string = Object.keys(datas[l])[0];
+                data.push({
+                    id: parseInt(prefixedId.substr(1)),
+                    label: datas[l][prefixedId]
+                })
             }
 
             cards.setItems(data);
             cards.update();
+
+            var check : boolean = false;
+            firebase.on("child_added", (item : any) => {
+                if(check) {
+                    log.debug(item.val());
+                }
+            });
+            setTimeout(() => {check = true; log.info("let the checking begin")}, 3000);
         });
     });
-
 /*
     var cards = new Lib.Cards({
         wrapper: '.swipe'

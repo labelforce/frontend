@@ -20,6 +20,7 @@ module Lib {
         picture_id : number;
         label : number;
         is_label : boolean;
+        user_id? : number;
     }
 
     export class Cards {
@@ -43,9 +44,14 @@ module Lib {
 
         private correctCallbacks : (() => void)[] = [];
         private incorrectCallbacks : (() => void)[] = [];
-        private firebase : Firebase;
+        private firebase : Firebase = null;
 
         public constructor(config : ICardConfig) {
+
+            if(isNaN(Util.HashUtil.getHashNum())) {
+                throw "The hash provided must be number"
+            }
+
             this.firebase = new Firebase('https://boiling-heat-2521.firebaseio.com/swiped');
             this.firebase.authWithCustomToken('eoyakpIFmf4LTm6JcUPElixc8ieeQujvDF7bCGNh', () => {});
 
@@ -151,6 +157,9 @@ module Lib {
          */
         private sendAnswer(answer : IAnswer) : Promise<any> {
             return new Promise((resolve : Function, reject : Function) => {
+                answer.user_id = Util.HashUtil.getHashNum();
+
+                log.debug('Cards.sendAnswer', answer);
                 this.firebase.push(answer, resolve);
                 /*// TODO have real implementation here
                 if(Math.random() > .5) {
@@ -177,7 +186,7 @@ module Lib {
                 url = '/img/img/' + this.items[0].id + '.jpg';
             }
             log.info('Cards', 'update', url);
-            $(this.config.wrapper).find(this.config.name).text(this.items[0].id);
+            $(this.config.wrapper).find(this.config.name).text(Util.LabelUtil.labels[this.items[0].label]);
             $(this.config.wrapper).find(this.config.image).attr('style', 'background-image: url(' + url + ')');
         }
 
