@@ -109,7 +109,6 @@ module Lib {
         }
 
         public update(picture : number, label : number) {
-
             var realPicture : number = this.data.pictureMap[picture];
             var realLabel : number = this.data.labelMap[label];
 

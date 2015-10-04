@@ -13,6 +13,11 @@ module Lib {
         nextPoints? : string;
     }
 
+    interface IScore {
+        exp : number;
+        ether : number;
+    }
+
     export class Leveling {
 
         private static DEFAULTCONFIG : ILevelingConfig = {
@@ -47,6 +52,17 @@ module Lib {
 
         public constructor(cards : Cards, config : ILevelingConfig = {}) {
 
+            Util.FirebaseUtil.getFirebase('score').then((firebase : Firebase) => {
+                firebase.on('value', (value) => {
+                    var score : IScore = value.val();
+                    if(score !== null) {
+                        this.ether = score.ether;
+                        this.points = score.exp;
+                        this.update();
+                    }
+                    log.info('Leveling', 'score received', value.val());
+                })
+            });
 
             this.cards = cards;
             this.config = $.extend(true, {}, Leveling.DEFAULTCONFIG, config);
