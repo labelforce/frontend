@@ -113,6 +113,7 @@ module Lib {
             var realLabel : number = this.data.labelMap[label];
 
             var previousLabel : number = this.data.links[this.data.pictureLinkMap[picture]].source.label;
+            if(previousLabel === null) return;
             this.data.links[this.data.pictureLinkMap[picture]].source = realPicture;
             this.data.links[this.data.pictureLinkMap[picture]].target = realLabel;
 
@@ -126,7 +127,7 @@ module Lib {
 
             setTimeout(() => {
                 $(".drawingMiddle img").attr("src", "/img/img/" + picture + ".jpg");
-                $(".drawingMiddle .newCategoryText").text("new Label: " + label);
+                $(".drawingMiddle .newCategoryText").text("new Label: " + Util.LabelUtil.labels[label]);
 
                 log.debug('Graph.update', 'move', picture, previousLabel, '=>', label);
                 log.text('Graph.update', 'adding class shown');
