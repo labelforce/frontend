@@ -41,7 +41,20 @@ if(window['view'] === 'index') {
                      graph.update(parseInt(prefixedId.substr(1)), v[prefixedId]);
                 }
             });
-            setTimeout(() => {check = true;log.info('let the checking beginn')}, 4000)
+            setTimeout(() => {check = true;log.info('let the checking beginn')}, 4000);
+
+            if(Util.HashUtil.getHash() === 'p') {
+                function fake() {
+                    log.info("sending fake")
+                    var rand = Math.round(Math.random() * 99) + 1;
+                    var labl = Math.round(Math.random() * 8) + 1;
+                    graph.update(rand, labl);
+                    var offset = Math.round(Math.random() * 5000) + 500;
+                    setTimeout(fake, offset);
+                }
+                setTimeout(fake, 1200);
+            }
+
         });
     });
 
